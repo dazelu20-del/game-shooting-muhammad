@@ -9,7 +9,9 @@ const MAX_HEALTH := 100
 
 @onready var camera: Camera3D = $Camera3D
 @onready var shoot_point: Marker3D = $Camera3D/ShootPoint
-@onready var body_mesh: MeshInstance3D = $BodyMesh
+@onready var steve_body: Node3D = $SteveBody
+@onready var fps_gun: Node3D = $Camera3D/FpsGun
+@onready var world_gun: Node3D = $GunMount/WorldGun
 
 var health: int = MAX_HEALTH
 var shoot_timer: float = 0.0
@@ -27,13 +29,17 @@ func _ready() -> void:
 		is_local = true
 		camera.current = true
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		steve_body.visible = false
+		fps_gun.visible = true
+		world_gun.visible = false
 	else:
 		camera.current = false
+		fps_gun.visible = false
+		world_gun.visible = true
 
 func _apply_color() -> void:
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = player_color
-	body_mesh.material_override = mat
+	if steve_body.has_method("apply_tint"):
+		steve_body.apply_tint(player_color)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_local:
@@ -98,6 +104,10 @@ func _try_shoot() -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func _rpc_shoot() -> void:
+	if fps_gun.has_method("play_recoil"):
+		fps_gun.play_recoil()
+	if world_gun.has_method("play_recoil"):
+		world_gun.play_recoil()
 	var bullet_scene: PackedScene = preload("res://scenes/bullet.tscn")
 	var bullet: Area3D = bullet_scene.instantiate()
 	bullet.shooter = self
@@ -131,6 +141,8 @@ func _die(_killer: Node3D = null) -> void:
 	died.emit(self)
 	if is_local:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if steve_body.has_method("set_hitboxes_enabled"):
+		steve_body.set_hitboxes_enabled(false)
 	set_collision_layer_value(2, false)
 	set_collision_mask_value(2, false)
 	visible = false
@@ -141,6 +153,8 @@ func _die(_killer: Node3D = null) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func _notify_death() -> void:
+	if steve_body.has_method("set_hitboxes_enabled"):
+		steve_body.set_hitboxes_enabled(false)
 	visible = false
 	set_collision_layer_value(2, false)
 	set_collision_mask_value(2, false)

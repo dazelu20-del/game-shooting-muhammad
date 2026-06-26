@@ -11,9 +11,9 @@ func _ready() -> void:
 func _configure_map_colors() -> void:
 	match name:
 		"MapArena":
-			floor_color = Color(0.4, 0.35, 0.3)
-			wall_color = Color(0.55, 0.45, 0.35)
-			accent_color = Color(0.8, 0.5, 0.2)
+			floor_color = Color(0.42, 0.42, 0.44)
+			wall_color = Color(0.42, 0.42, 0.44)
+			accent_color = Color(0.42, 0.42, 0.44)
 		"MapForest":
 			floor_color = Color(0.2, 0.45, 0.2)
 			wall_color = Color(0.35, 0.25, 0.15)

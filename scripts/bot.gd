@@ -9,7 +9,8 @@ const SHOOT_RANGE := 18.0
 @export var bot_color: Color = Color(1.0, 0.3, 0.3)
 
 @onready var shoot_point: Marker3D = $ShootPoint
-@onready var body_mesh: MeshInstance3D = $BodyMesh
+@onready var steve_body: Node3D = $SteveBody
+@onready var gun: Node3D = $ShootPoint/Gun
 
 var health: int = MAX_HEALTH
 var shoot_timer: float = 0.0
@@ -19,9 +20,8 @@ var combat_delay: float = 2.5
 signal died(bot: Node3D)
 
 func _ready() -> void:
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = bot_color
-	body_mesh.material_override = mat
+	if steve_body.has_method("apply_tint"):
+		steve_body.apply_tint(bot_color)
 	shoot_timer = SHOOT_COOLDOWN
 	combat_delay = 2.5
 
@@ -67,17 +67,22 @@ func _physics_process(delta: float) -> void:
 func _find_target() -> void:
 	var best_dist := DETECT_RANGE
 	target = null
-	for node in get_tree().get_nodes_in_group("players"):
-		if not is_instance_valid(node) or not node.visible:
-			continue
-		var dist := global_position.distance_to(node.global_position)
-		if dist < best_dist:
-			best_dist = dist
-			target = node
+	for group_name in ["players", "bots"]:
+		for node in get_tree().get_nodes_in_group(group_name):
+			if node == self:
+				continue
+			if not is_instance_valid(node) or not node.visible:
+				continue
+			var dist := global_position.distance_to(node.global_position)
+			if dist < best_dist:
+				best_dist = dist
+				target = node
 
 func _shoot() -> void:
 	if not target:
 		return
+	if gun.has_method("play_recoil"):
+		gun.play_recoil()
 	var bullet_scene: PackedScene = preload("res://scenes/bullet.tscn")
 	var bullet: Area3D = bullet_scene.instantiate()
 	bullet.shooter = self
@@ -93,6 +98,8 @@ func take_damage(amount: int, _attacker: Node3D = null) -> void:
 
 func _die() -> void:
 	died.emit(self)
+	if steve_body.has_method("set_hitboxes_enabled"):
+		steve_body.set_hitboxes_enabled(false)
 	set_collision_layer_value(2, false)
 	visible = false
 	set_physics_process(false)

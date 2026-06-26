@@ -75,41 +75,6 @@ mesh = SubResource("BoxMesh_wall")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/WallWest"]
 shape = SubResource("BoxShape_wall")
 
-[node name="Obstacles" type="Node3D" parent="."]
-
-[node name="Crate1" type="StaticBody3D" parent="Obstacles"]
-collision_layer = 1
-collision_mask = 0
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacles/Crate1"]
-mesh = SubResource("BoxMesh_wall")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacles/Crate1"]
-shape = SubResource("BoxShape_wall")
-
-[node name="Crate2" type="StaticBody3D" parent="Obstacles"]
-collision_layer = 1
-collision_mask = 0
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, 5)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacles/Crate2"]
-mesh = SubResource("BoxMesh_wall")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacles/Crate2"]
-shape = SubResource("BoxShape_wall")
-
-[node name="Crate3" type="StaticBody3D" parent="Obstacles"]
-collision_layer = 1
-collision_mask = 0
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Obstacles/Crate3"]
-mesh = SubResource("BoxMesh_wall")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Obstacles/Crate3"]
-shape = SubResource("BoxShape_wall")
-
 [node name="SpawnPoints" type="Node3D" parent="."]
 
 [node name="PlayerSpawn" type="Marker3D" parent="SpawnPoints"]

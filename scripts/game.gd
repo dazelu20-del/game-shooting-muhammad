@@ -16,6 +16,7 @@ var players_alive: int = 0
 @onready var result_panel: Panel = $HUD/ResultPanel
 @onready var result_label: Label = $HUD/ResultPanel/ResultLabel
 @onready var menu_button: Button = $HUD/ResultPanel/MenuButton
+@onready var crosshair: Control = $HUD/Crosshair
 @onready var spawn_root: Node3D = $SpawnRoot
 
 func _ready() -> void:
@@ -206,6 +207,7 @@ func _show_result(won: bool, message: String) -> void:
 		return
 	game_over = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	crosshair.visible = false
 	result_panel.visible = true
 	result_label.text = message
 	result_label.modulate = Color(0.3, 1, 0.4) if won else Color(1, 0.35, 0.35)
