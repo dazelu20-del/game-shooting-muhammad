@@ -1,0 +1,41 @@
+---
+description: Commit every change automatically after completing work
+alwaysApply: true
+---
+
+# Auto-commit changes
+
+After completing any task that modifies files, **always create a git commit** without waiting for the user to ask.
+
+## When to commit
+
+- Commit once at the end of each completed task (feature, fix, refactor, etc.)
+- Do not leave uncommitted work when the task is done
+- Skip committing only when there are no file changes
+
+## Git safety
+
+- NEVER update git config
+- NEVER run destructive commands (push --force, hard reset, etc.) unless explicitly requested
+- NEVER skip hooks (--no-verify, --no-gpg-sign, etc.)
+- NEVER force push to main/master
+- Avoid `git commit --amend` unless the user explicitly requests it
+- Do not commit files that likely contain secrets (.env, credentials.json, etc.)
+- Do not push unless the user explicitly asks
+
+## Commit workflow
+
+1. Run in parallel: `git status`, `git diff`, `git log` (recent messages for style)
+2. Stage relevant files; exclude secrets
+3. Write a concise 1–2 sentence message focused on **why**, not just what
+4. Commit using a HEREDOC for the message
+5. Run `git status` after to verify success
+6. If a pre-commit hook fails, fix the issue and create a **new** commit (do not amend)
+
+## Message style
+
+Match existing repo commit style. Prefer imperative mood:
+
+- `Add player collision detection`
+- `Fix bullet despawn off-screen`
+- `Refactor enemy spawn logic`
