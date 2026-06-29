@@ -137,6 +137,15 @@ func _apply_damage(amount: int, _attacker: Node3D = null) -> void:
 	if health <= 0:
 		_die()
 
+func heal(amount: int) -> bool:
+	if health >= MAX_HEALTH:
+		return false
+	if multiplayer.multiplayer_peer and not is_multiplayer_authority():
+		return false
+	health = mini(health + amount, MAX_HEALTH)
+	health_changed.emit(health, MAX_HEALTH)
+	return true
+
 func _die(_killer: Node3D = null) -> void:
 	died.emit(self)
 	if is_local:

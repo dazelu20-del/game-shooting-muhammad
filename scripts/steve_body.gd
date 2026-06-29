@@ -69,11 +69,13 @@ func _add_hitbox(part_name: String, pos: Vector3, size: Vector3) -> void:
 	var area := Area3D.new()
 	area.name = part_name
 	area.collision_layer = 8
-	area.collision_mask = 0
+	area.collision_mask = 4
+	area.monitorable = true
+	area.monitoring = false
 	area.add_to_group("hitbox")
 	var collision := CollisionShape3D.new()
 	var box_shape := BoxShape3D.new()
-	box_shape.size = size
+	box_shape.size = size * 1.1
 	collision.shape = box_shape
 	area.add_child(collision)
 	area.position = pos

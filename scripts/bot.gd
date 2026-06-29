@@ -97,6 +97,7 @@ func take_damage(amount: int, _attacker: Node3D = null) -> void:
 		_die()
 
 func _die() -> void:
+	HealthOrb.spawn_at(global_position)
 	died.emit(self)
 	if steve_body.has_method("set_hitboxes_enabled"):
 		steve_body.set_hitboxes_enabled(false)
